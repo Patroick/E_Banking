@@ -37,11 +37,19 @@
 
                 <div class="form-group pt-3">
                     <h4 class="pt-3 pb-2">Bitte Registrieren</h4>
-                    <input type="text" style="width: 20em; height: 3em" id="email" name="email" value="<?= htmlspecialchars("testitest") ?>" placeholder="E-Mail" minlength="5" maxlength="30" required>
+                    <input type="text" style="width: 20em; height: 3em" id="email" name="email" value="<?= htmlspecialchars("") ?>" placeholder="Vorname" minlength="5" maxlength="30" required>
                 </div>
 
                 <div class="form-group pt-3">
-                    <input type="password" style="width: 20em; height: 3em" id="password" name="password" value="<?= htmlspecialchars("testitestpassword") ?>" placeholder="Passwort" minlength="5" maxlength="20" required>
+                    <input type="password" style="width: 20em; height: 3em" id="password" name="password" value="<?= htmlspecialchars("") ?>" placeholder="Nachname" minlength="5" maxlength="20" required>
+                </div>
+
+                <div class="form-group pt-3">
+                    <input type="password" style="width: 20em; height: 3em" id="password" name="password" value="<?= htmlspecialchars("") ?>" placeholder="E-Mail" minlength="5" maxlength="20" required>
+                </div>
+
+                <div class="form-group pt-3">
+                    <input type="password" style="width: 20em; height: 3em" id="password" name="password" value="<?= htmlspecialchars("") ?>" placeholder="Passwort" minlength="5" maxlength="20" required>
                 </div>
 
                 <div>

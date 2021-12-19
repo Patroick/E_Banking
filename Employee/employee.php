@@ -15,8 +15,6 @@
 
     <?php
 
-    require "user/user.php";
-
     $email = '';
     $password = '';
     $errors = [];
@@ -36,12 +34,8 @@
         }
     }
 
-    if (isset($_POST['register'])) {
-        header("Location: Register/register.php");
-    }
-
-    if (isset($_POST['employeeLogin'])) {
-        header("Location: Employee/employee.php");
+    if (isset($_POST['goBack'])) {
+        header("Location: ../index.php");
     }
 
     ?>
@@ -50,7 +44,7 @@
         <div style="text-align: center">
             <form id="loginForm" action="index.php" method="post">
 
-                <h1 class="mt-5" style="text-align: center">Login</h1>
+                <h1 class="mt-5" style="text-align: center">Angestellten Login</h1>
 
                 <div class="form-group pt-3">
                     <h4 class="pt-3 pb-2">Bitte Anmelden</h4>
@@ -76,16 +70,9 @@
             </form>
 
             <div class="form-group pt-3">
-                <form id="employeeForm" action="index.php" method="post">
-                    <h5 class="pt-3">Angestellten Login?</h5>
-                    <button type="submit" style="width: 15em; height: 2.5em" name="employeeLogin" class="btn btn-secondary">Anmelden</button>
-                </form>
-            </div>
-
-            <div class="form-group pt-3">
-                <h5 class="pt-3">Noch keinen Account?</h5>
-                <form id="registerForm" action="index.php" method="post">
-                    <button type=" submit" style="width: 15em; height: 2.5em" name="register" class="btn btn-secondary">Registrieren</button>
+                <form id="employeeForm" action="employee.php" method="post">
+                    <h5 class="pt-3">Kein Angestellter?</h5>
+                    <button type="submit" style="width: 15em; height: 2.5em" name="goBack" class="btn btn-secondary">Zurück</button>
                 </form>
             </div>
 
