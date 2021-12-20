@@ -25,11 +25,14 @@
 
     $db = new Database();
 
-    if(isset($_GET['id'])){
+    if(isset($_GET['id']) && $_SESSION['isLoggedIn'] == true) {
         $id = $_GET['id'];
         $data = $db->getAccountData($id);
         $_SESSION['getData'] = $data;
-    } 
+    } else {
+        session_destroy();
+        header("Location: ../index.php");
+    }
 
     if(isset($_POST['logout'])){
         session_destroy();
