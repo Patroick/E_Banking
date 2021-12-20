@@ -48,14 +48,33 @@ class Transaktionen
 
         $userid = $this->getUserIdIBAN($useriban);
 
-        if ($userid != $sendinguser) {
+        if ($userid != $sendinguser && $this->userExists($useriban)) {
 
             $sql = "INSERT INTO E_Banking.Transactions (`useriban`, `amount`, `receivinguser`, `sendinguser`)
             VALUES ('$useriban', '$amount', '$userid', '$sendinguser')";
 
             $conn->query($sql);
+?>
+            <div class="alert alert-success col-sm-11 m-1" style="text-align: center;">
+                <h2>Transaktion Erfolgreich!</h2>
+                <p>Es wurden <?php echo $amount ?>€ an das Konto mit dem IBAN: <?php echo $useriban ?> gesendet.</p>
+            </div>
+        <?php
+        } else if ($userid == $sendinguser) {
+        ?>
+            <div class="alert alert-danger col-sm-11 m-1" style="text-align: center;">
+                <h2>Achtung!</h2>
+                <p>Sie können kein Geld auf Ihr eigenes Konto senden!</p>
+            </div>
+        <?php
         } else {
-            print_r("Sie können kein Geld an Ihr eigenes Konto schicken!");
+        ?>
+            <div class="alert alert-warning col-sm-11 m-1" style="text-align: center;">
+                <h3>Achtung!</h3>
+                <p>Es existiert kein Konto mit dem IBAN: <?php echo $useriban ?>!</p>
+                <p>Überweisung wurde Abgebrochen!</p>
+            </div>
+<?php
         }
 
         $conn->close();
@@ -81,6 +100,29 @@ class Transaktionen
 
         if (mysqli_num_rows($result) > 0) {
             return mysqli_fetch_assoc($result)['id'];
+        }
+
+        $conn->close();
+    }
+
+    function userExists($useriban)
+    {
+
+        // Create connection
+        $conn = new mysqli($this->servername, $this->username, $this->password, $this->dbname);
+        // Check connection
+
+        if ($conn->connect_error) {
+            die("Connection failed: " . $conn->connect_error);
+        }
+
+        $sql = "SELECT id FROM Users WHERE useriban LIKE '$useriban'";
+        $result = mysqli_query($conn, $sql);
+
+        if (!mysqli_num_rows($result) > 0) {
+            return false;
+        } else {
+            return true;
         }
 
         $conn->close();
