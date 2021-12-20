@@ -27,7 +27,7 @@
         $password = $_POST['password'] ? $_POST['password'] : '';
 
         if ($db->checkLoginEmployee($email, $password)) {
-            header("Location: Ebanking/ebanking.php");
+            header("Location: ../Ebanking/ebanking.php");
         } else {
             $message = "<p style='color: red'>Die eingegebenen Daten sind fehlerhaft!</p>";
             foreach ($errors as $key => $value) {

@@ -18,6 +18,20 @@
 <body>
 
     <?php 
+
+    session_start();
+
+    require_once("../Database/datenbank.php");
+
+    $db = new Database();
+
+    if(isset($_GET['id'])){
+        $id = $_GET['id'];
+        $data = $db->getAccountData($id);
+    } else {
+        print_r("here");
+    }
+
     if(isset($_POST['logout'])){
         session_destroy();
         header("Location: ../index.php");
@@ -40,8 +54,8 @@
                 <img src="../Img/unknown.png"
                      alt="Profilbild"
                      style="width: 6em; height: 6em">
-                <p class="pt-3">Huber Robert</p>
-                <p>hu.rob@tsn.at</p>
+                <p class="pt-3"><?php echo $data['firstname'] . ' ' . $data['lastname']; ?></p>
+                <p><?php echo $data['email']; ?></p>
                 <form name="logout"
                       action="ebanking.php"
                       method="post">
@@ -54,10 +68,10 @@
             <div class=" col-sm-3 border rounded m-1 text-truncate pt-3"
                  style="text-align: center; max-height: 22em">
                 <h3>Ihr Konto</h3>
-                <p>AT-411100000237571500</p>
+                <p><?php echo $data['useriban']; ?></p>
 
                 <p>Spar-Konto</p>
-                <p>Kontostand: 0,00 €</p>
+                <p>Kontostand: <?php echo $data['userbalance']; ?></p>
                 <form name="transaction"
                       id="transaction"
                       action="ebanking.php"

@@ -31,8 +31,8 @@
         $password = $_POST['password'] ? $_POST['password'] : '';
         $user = new user($email, $password);
 
-        if ($db->checkLogin($email, $password)) {
-            header("Location: Ebanking/ebanking.php");
+        if ($db->checkUserLogin($email, $password)) {
+            header("Location: Ebanking/ebanking.php?id=" . $db->getAccountId($email, $password));
         } else {
             $message = "<p style='color: red'>Die eingegebenen Daten sind fehlerhaft!</p>";
             foreach ($errors as $key => $value) {
