@@ -15,6 +15,8 @@
 
     <?php
 
+    session_start();
+
     require_once "../Database/datenbank.php";
 
     $email = '';
@@ -27,6 +29,7 @@
         $password = isset($_POST['password']) ? $_POST['password'] : '';
 
         if ($db->checkLoginEmployee($email, $password)) {
+            print_r("here");
             $_SESSION['isLoggedIn'][$db->getAccountId($email, $password)] = true;
             header("Location: ../Ebanking/adminebanking.php?id=" . $db->getAccountId($email, $password));
         } else {
