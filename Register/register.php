@@ -14,15 +14,26 @@
 <body>
 
     <?php
+
+    require "../Database/datenbank.php";
+
+    session_start();
+
+    $firstname = '';
+    $lastname = '';
     $email = '';
     $password = '';
     $user;
     $errors = [];
+    $db = new Database();
 
     if (isset($_POST['register'])) {
+        $firstname = isset($_POST['firstname']) ? $_POST['firstname'] : '';
+        $lastname = isset($_POST['lastname']) ? $_POST['lastname'] : '';
         $email = isset($_POST['email']) ? $_POST['email'] : '';
         $password = isset($_POST['password']) ? $_POST['password'] : '';
-        //$user = new user($email, $password);
+        $_SESSION['registered'] = 'Sie wurden erfolgreich registriert';
+        $db->addUser($firstname, $lastname, $email, $password);
         header("Location: ../index.php");
     }
 
@@ -37,19 +48,19 @@
 
                 <div class="form-group pt-3">
                     <h4 class="pt-3 pb-2">Bitte Registrieren</h4>
-                    <input type="text" style="width: 20em; height: 3em" id="email" name="email" value="<?= htmlspecialchars("") ?>" placeholder="Vorname" minlength="5" maxlength="30" required>
+                    <input type="text" style="width: 20em; height: 3em" id="firstname" name="firstname" value="<?= htmlspecialchars("") ?>" placeholder="Vorname" minlength="5" maxlength="30" required>
                 </div>
 
                 <div class="form-group pt-3">
-                    <input type="password" style="width: 20em; height: 3em" id="password" name="password" value="<?= htmlspecialchars("") ?>" placeholder="Nachname" minlength="5" maxlength="20" required>
+                    <input type="text" style="width: 20em; height: 3em" id="lastname" name="lastname" value="<?= htmlspecialchars("") ?>" placeholder="Nachname" minlength="5" maxlength="30" required>
                 </div>
 
                 <div class="form-group pt-3">
-                    <input type="password" style="width: 20em; height: 3em" id="password" name="password" value="<?= htmlspecialchars("") ?>" placeholder="E-Mail" minlength="5" maxlength="20" required>
+                    <input type="email" style="width: 20em; height: 3em" id="email" name="email" value="<?= htmlspecialchars("") ?>" placeholder="E-Mail" minlength="5" maxlength="50" required>
                 </div>
 
                 <div class="form-group pt-3">
-                    <input type="password" style="width: 20em; height: 3em" id="password" name="password" value="<?= htmlspecialchars("") ?>" placeholder="Passwort" minlength="5" maxlength="20" required>
+                    <input type="password" style="width: 20em; height: 3em" id="password" name="password" value="<?= htmlspecialchars("") ?>" placeholder="Passwort" minlength="5" maxlength="50" required>
                 </div>
 
                 <div>

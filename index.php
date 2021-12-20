@@ -15,18 +15,23 @@
 
     <?php
 
+    session_start();
+
     require "user/user.php";
+    require_once "Database/datenbank.php";
 
     $email = '';
     $password = '';
     $errors = [];
+    $db = new Database();
+    $db->createDB();
 
     if (isset($_POST['login'])) {
         $email = isset($_POST['email']) ? $_POST['email'] : '';
         $password = $_POST['password'] ? $_POST['password'] : '';
         $user = new user($email, $password);
 
-        if ($user->validate($email, $password) && $user->userLogin($email, $password)) {
+        if ($db->checkLogin($email, $password)) {
             header("Location: Ebanking/ebanking.php");
         } else {
             $message = "<p style='color: red'>Die eingegebenen Daten sind fehlerhaft!</p>";
@@ -51,6 +56,13 @@
             <form id="loginForm" action="index.php" method="post">
 
                 <h1 class="mt-5" style="text-align: center">Login</h1>
+
+                <?php
+                    if(isset($_SESSION['registered']) && $_SESSION['registered'] != '') {
+                        echo $_SESSION['registered'];
+                        $_SESSION['registered'] = '';
+                    }
+                ?>
 
                 <div class="form-group pt-3">
                     <h4 class="pt-3 pb-2">Bitte Anmelden</h4>
