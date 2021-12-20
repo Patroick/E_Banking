@@ -133,9 +133,10 @@
             <?php
             }
             if (isset($_POST['transfer'])) {
-                $recipient = isset($_POST['recipient']) ? $_POST['recipient'] : '';
+                $sendinguser = isset($_SESSION['useriban']) ? $_SESSION['useriban'] : '';
+                $recieveinguser = isset($_POST['recipient']) ? $_POST['recipient'] : '';
                 $amount = isset($_POST['amount']) ? $_POST['amount'] : '';
-                $tran->makeTransaction($recipient, $amount);
+                $tran->makeTransaction($sendinguser, $amount, $recieveinguser, $sendinguser);
             }
             if (isset($_POST['transactionHistory'])) { ?>
                 <div class="col-sm-11 border rounded m-1 p-3" style="max-height: 30em">
