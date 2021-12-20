@@ -51,6 +51,8 @@
             )";
 
             $conn->query($sql);
+
+            $conn->close();
         }
 
         function addUser($firstname, $lastname, $email, $userpassword)
@@ -64,7 +66,7 @@
 
             $iban = $this->ibanGenerator();
 
-            $sql = "INSERT INTO users (`userrole`, `firstname`, `lastname`, `email`, `userpassword`, `userbalance`, `useriban`, `userbic`)
+            $sql = "INSERT INTO Users (`userrole`, `firstname`, `lastname`, `email`, `userpassword`, `userbalance`, `useriban`, `userbic`)
             VALUES ('User', '$firstname', '$lastname', '$email', MD5('$userpassword'), '0.00', '$iban', 'GIBAATWW')";
 
             if ($conn->query($sql) === TRUE) {
