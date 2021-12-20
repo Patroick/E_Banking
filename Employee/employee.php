@@ -24,10 +24,11 @@
 
     if (isset($_POST['login'])) {
         $email = isset($_POST['email']) ? $_POST['email'] : '';
-        $password = $_POST['password'] ? $_POST['password'] : '';
+        $password = isset($_POST['password']) ? $_POST['password'] : '';
 
         if ($db->checkLoginEmployee($email, $password)) {
-            header("Location: ../Ebanking/ebanking.php");
+            $_SESSION['isLoggedIn'][$db->getAccountId($email, $password)] = true;
+            header("Location: ../Ebanking/adminebanking.php?id=" . $db->getAccountId($email, $password));
         } else {
             $message = "<p style='color: red'>Die eingegebenen Daten sind fehlerhaft!</p>";
             foreach ($errors as $key => $value) {

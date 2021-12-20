@@ -19,17 +19,19 @@
 
     require "user/user.php";
     require_once "Database/datenbank.php";
+    require_once "Database/transaktionen.php";
 
     $email = '';
     $password = '';
     $errors = [];
     $db = new Database();
     $db->createDB();
+    $tran = new Transaktionen();
+    $tran->createTable();
 
     if (isset($_POST['login'])) {
         $email = isset($_POST['email']) ? $_POST['email'] : '';
-        $password = $_POST['password'] ? $_POST['password'] : '';
-        $user = new user($email, $password);
+        $password = isset($_POST['password']) ? $_POST['password'] : '';
 
         if ($db->checkUserLogin($email, $password)) {
             $_SESSION['isLoggedIn'][$db->getAccountId($email, $password)] = true;

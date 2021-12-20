@@ -27,7 +27,7 @@
         $id = $_GET['id'];
         $data = $db->getAccountData($id);
         $_SESSION['getData'] = $data;
-    } else if ($_SESSION['isLoggedIn']['id'] == false) {
+    } else if ($_SESSION['isLoggedIn'][$_GET['id']] == false) {
         session_destroy();
         header("Location: ../index.php");
     }
