@@ -28,9 +28,8 @@
     if(isset($_GET['id'])){
         $id = $_GET['id'];
         $data = $db->getAccountData($id);
-    } else {
-        print_r("here");
-    }
+        $_SESSION['getData'] = $data;
+    } 
 
     if(isset($_POST['logout'])){
         session_destroy();
@@ -54,8 +53,8 @@
                 <img src="../Img/unknown.png"
                      alt="Profilbild"
                      style="width: 6em; height: 6em">
-                <p class="pt-3"><?php echo $data['firstname'] . ' ' . $data['lastname']; ?></p>
-                <p><?php echo $data['email']; ?></p>
+                <p class="pt-3"><?php echo $_SESSION['getData']['firstname'] . ' ' . $_SESSION['getData']['lastname']; ?></p>
+                <p><?php echo $_SESSION['getData']['email']; ?></p>
                 <form name="logout"
                       action="ebanking.php"
                       method="post">
@@ -68,10 +67,10 @@
             <div class=" col-sm-3 border rounded m-1 text-truncate pt-3"
                  style="text-align: center; max-height: 22em">
                 <h3>Ihr Konto</h3>
-                <p><?php echo $data['useriban']; ?></p>
+                <p><?php echo $_SESSION['getData']['useriban']; ?></p>
 
                 <p>Spar-Konto</p>
-                <p>Kontostand: <?php echo $data['userbalance']; ?></p>
+                <p>Kontostand: <?php echo $_SESSION['getData']['userbalance']; ?></p>
                 <form name="transaction"
                       id="transaction"
                       action="ebanking.php"
