@@ -32,7 +32,7 @@
         $user = new user($email, $password);
 
         if ($db->checkUserLogin($email, $password)) {
-            $_SESSION['isLoggedIn'] = true;
+            $_SESSION['isLoggedIn'][$db->getAccountId($email, $password)] = true;
             header("Location: Ebanking/ebanking.php?id=" . $db->getAccountId($email, $password));
         } else {
             $message = "<p style='color: red'>Die eingegebenen Daten sind fehlerhaft!</p>";

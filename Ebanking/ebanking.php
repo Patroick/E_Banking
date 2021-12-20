@@ -24,11 +24,11 @@
     $tran = new Transaktionen();
     $tran->createTable();
 
-    if (isset($_GET['id']) && $_SESSION['isLoggedIn'] == true) {
+    if (isset($_GET['id']) && $_SESSION['isLoggedIn'][$_GET['id']] == true) {
         $id = $_GET['id'];
         $data = $db->getAccountData($id);
         $_SESSION['getData'] = $data;
-    } else if ($_SESSION['isLoggedIn'] == false) {
+    } else if ($_SESSION['isLoggedIn']['id'] == false) {
         session_destroy();
         header("Location: ../index.php");
     }
@@ -64,10 +64,10 @@
 
                 <p>Spar-Konto</p>
                 <p>Kontostand: <?php echo $_SESSION['getData']['userbalance']; ?></p>
-                <form name="transaction" id="transaction" action="ebanking.php" method="post">
+                <form name="transaction" id="transaction" action="ebanking.php?id=<?php echo $_SESSION['getData']['id']; ?>" method="post">
                     <button type="submit" name="transaction" class="btn btn-primary">Überweisung</button></br></br>
                 </form>
-                <form name="transactionHistory" action="ebanking.php" method="post">
+                <form name="transactionHistory" action="ebanking.php?id=<?php echo $_SESSION['getData']['id']; ?>" method="post">
                     <button type="submit" name="transactionHistory" class="btn btn-secondary" style="background-color: green">Überweisungshistorie</button></br></br>
                 </form>
             </div>
@@ -117,7 +117,7 @@
         <div class="row">
             <?php
             if (isset($_POST['transaction'])) { ?>
-                <form name="transactionForm" action="ebanking.php" method="post">
+                <form name="transactionForm" action="ebanking.php?id=<?php echo $_SESSION['getData']['id']; ?>" method="post">
                     <div class="col-sm-11 border rounded m-1 pt-3 container">
                         <div class="form-group">
                             <label for="recipient">IBAN</label>
@@ -130,7 +130,7 @@
                         <button type="submit" name="transfer" class="btn btn-primary mb-2 mt-2">Überweisen</button>
                     </div>
                 </form>
-                <?php
+            <?php
             }
             if (isset($_POST['transfer'])) {
                 $recipient = isset($_POST['recipient']) ? $_POST['recipient'] : '';
@@ -138,109 +138,109 @@
                 $tran->makeTransaction($recipient, $amount);
             }
             if (isset($_POST['transactionHistory'])) { ?>
-                    <div class="col-sm-11 border rounded m-1 p-3" style="max-height: 30em">
-                        <h3>Überweisungshistorie</h3>
-                        <div class="row ">
-                            <div class="col-sm-3">
+                <div class="col-sm-11 border rounded m-1 p-3" style="max-height: 30em">
+                    <h3>Überweisungshistorie</h3>
+                    <div class="row ">
+                        <div class="col-sm-3">
 
-                                <form name="sortByDate" action="ebanking.php" method="post">
-                                    <label for="sortByDate">Von</label>
-                                    <input type="date" name="sortByDate" class="form-control">
-                                    <label for="sortByDate">Bis</label>
-                                    <input type="date" name="sortByDate" class="form-control">
+                            <form name="sortByDate" action="ebanking.php" method="post">
+                                <label for="sortByDate">Von</label>
+                                <input type="date" name="sortByDate" class="form-control">
+                                <label for="sortByDate">Bis</label>
+                                <input type="date" name="sortByDate" class="form-control">
 
-
-                            </div>
-                            <div class="col-sm-6">
-                                <div class="row">
-                                    <form name="sortByText" action="ebanking.php" method="post">
-                                        <label for="sortByText">Text</label>
-                                        <input type="text" name="sortByText" class="form-control">
-
-                                </div>
-                            </div>
-                            <div class="col-sm-2">
-                                <form name="sortByDate" action="ebanking.php" method="post">
-                                    <label for="sortByAmount">Min</label>
-                                    <input type="text" name="sortByAmount" class="form-control" placeholder="0.00">
-                                    <label for="sortByAmount">Max</label>
-                                    <input type="text" name="sortByDate" class="form-control" placeholder="0.00">
-                            </div>
 
                         </div>
-                        <div class="table-responsive" style="max-height: 17em">
-                            <table class="table table-hover">
+                        <div class="col-sm-6">
+                            <div class="row">
+                                <form name="sortByText" action="ebanking.php" method="post">
+                                    <label for="sortByText">Text</label>
+                                    <input type="text" name="sortByText" class="form-control">
 
-
-                                <thead class="thead-dark" style="position: sticky;">
-                                    <tr>
-                                        <th scope="col">Datum</td>
-                                        <th scope="col">Empfänger/Sender</td>
-                                        <th scope="col">Betrag</td>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td>12.12.2021</td>
-                                        <td>AT-123465436324</td>
-                                        <td>-350.00€</td>
-                                    </tr>
-                                    <tr>
-                                        <td>15.12.2021</td>
-                                        <td>AT-12309638324</td>
-                                        <td>-100.00€</td>
-                                    </tr>
-                                    <tr>
-                                        <td>01.02.2022</td>
-                                        <td>AT-12348395324</td>
-                                        <td>700.00€</td>
-                                    </tr>
-                                    <tr>
-                                        <td>01.02.2022</td>
-                                        <td>AT-12348395324</td>
-                                        <td>700.00€</td>
-                                    </tr>
-                                    <tr>
-                                        <td>01.02.2022</td>
-                                        <td>AT-12348395324</td>
-                                        <td>700.00€</td>
-                                    </tr>
-                                    <tr>
-                                        <td>12.12.2021</td>
-                                        <td>AT-123465436324</td>
-                                        <td>-350.00€</td>
-                                    </tr>
-                                    <tr>
-                                        <td>15.12.2021</td>
-                                        <td>AT-12309638324</td>
-                                        <td>-100.00€</td>
-                                    </tr>
-                                    <tr>
-                                        <td>01.02.2022</td>
-                                        <td>AT-12348395324</td>
-                                        <td>700.00€</td>
-                                    </tr>
-                                    <tr>
-                                        <td>01.02.2022</td>
-                                        <td>AT-12348395324</td>
-                                        <td>700.00€</td>
-                                    </tr>
-                                    <tr>
-                                        <td>01.02.2022</td>
-                                        <td>AT-12348395324</td>
-                                        <td>700.00€</td>
-                                    </tr>
-                                </tbody>
-                            </table>
+                            </div>
+                        </div>
+                        <div class="col-sm-2">
+                            <form name="sortByDate" action="ebanking.php" method="post">
+                                <label for="sortByAmount">Min</label>
+                                <input type="text" name="sortByAmount" class="form-control" placeholder="0.00">
+                                <label for="sortByAmount">Max</label>
+                                <input type="text" name="sortByDate" class="form-control" placeholder="0.00">
                         </div>
 
                     </div>
+                    <div class="table-responsive" style="max-height: 17em">
+                        <table class="table table-hover">
+
+
+                            <thead class="thead-dark" style="position: sticky;">
+                                <tr>
+                                    <th scope="col">Datum</td>
+                                    <th scope="col">Empfänger/Sender</td>
+                                    <th scope="col">Betrag</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>12.12.2021</td>
+                                    <td>AT-123465436324</td>
+                                    <td>-350.00€</td>
+                                </tr>
+                                <tr>
+                                    <td>15.12.2021</td>
+                                    <td>AT-12309638324</td>
+                                    <td>-100.00€</td>
+                                </tr>
+                                <tr>
+                                    <td>01.02.2022</td>
+                                    <td>AT-12348395324</td>
+                                    <td>700.00€</td>
+                                </tr>
+                                <tr>
+                                    <td>01.02.2022</td>
+                                    <td>AT-12348395324</td>
+                                    <td>700.00€</td>
+                                </tr>
+                                <tr>
+                                    <td>01.02.2022</td>
+                                    <td>AT-12348395324</td>
+                                    <td>700.00€</td>
+                                </tr>
+                                <tr>
+                                    <td>12.12.2021</td>
+                                    <td>AT-123465436324</td>
+                                    <td>-350.00€</td>
+                                </tr>
+                                <tr>
+                                    <td>15.12.2021</td>
+                                    <td>AT-12309638324</td>
+                                    <td>-100.00€</td>
+                                </tr>
+                                <tr>
+                                    <td>01.02.2022</td>
+                                    <td>AT-12348395324</td>
+                                    <td>700.00€</td>
+                                </tr>
+                                <tr>
+                                    <td>01.02.2022</td>
+                                    <td>AT-12348395324</td>
+                                    <td>700.00€</td>
+                                </tr>
+                                <tr>
+                                    <td>01.02.2022</td>
+                                    <td>AT-12348395324</td>
+                                    <td>700.00€</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                </div>
 
 
 
-                <?php
+            <?php
             }
-                ?>
+            ?>
 
         </div>
 
