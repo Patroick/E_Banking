@@ -27,6 +27,10 @@
         $id = $_GET['id'];
         $data = $db->getAccountData($id);
         $_SESSION['getData'] = $data;
+        if ($data['userrole'] == 'Employee') {
+            session_destroy();
+            header("Location: ../index.php");
+        }
     } else if ($_SESSION['isLoggedIn']['id'] == false) {
         session_destroy();
         header("Location: ../index.php");
@@ -202,7 +206,7 @@
                                         <th scope="col">Betrag</td>
                                     </tr>
                                 </thead>
-                                <?php $tran->getTableRecentTransactionsUser(isset($_SESSION['getData']['id'])) ?>
+                                <?php $tran->getTableRecentTransactionsAllUser(isset($_SESSION['getData']['id'])) ?>
                             </table>
                         </div>
 

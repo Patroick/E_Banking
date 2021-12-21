@@ -92,7 +92,7 @@ class Transaktionen
         $conn->close();
     }
 
-    function getTableRecentTransactionsAll()
+    function getTableRecentTransactionsAllUser($userid)
     {
         // Create connection
         $conn = new mysqli($this->servername, $this->username, $this->password, $this->dbname);
@@ -102,13 +102,29 @@ class Transaktionen
             die("Connection failed: " . $conn->connect_error);
         }
 
-        $sql = "SELECT * FROM Users ORDER BY id DESC LIMIT 5";
+        $sql = "SELECT * FROM Transactions WHERE sendinguserid = $userid";
         $result = mysqli_query($conn, $sql);
 
         if (mysqli_num_rows($result) > 0) {
-            return mysqli_fetch_assoc($result)['id'];
-        }
+            $table = '';
+            foreach ($result as $row) {
+                $tablerow = '<tr>
+                        <td>' . $row['transactiondate'] . '</td>
+                        <td>' . $row['sendinguserIBAN'] . '</td>
+                        <td>' . $row['sendinguserBIC'] . '</td>
+                        <td>' . $row['receivinguserIBAN'] . '</td>
+                        <td>' . $row['receivinguserBIC'] . '</td>
+                        <td>' . $row['reference'] . '</td>
+                        <td>' . $row['reason'] . '</td>
+                        <td>' . $row['amount'] . '€</td>
+                        </tr>';
 
+                $table .= $tablerow;
+            }
+
+            echo $table;
+            unset($table);
+        }
         $conn->close();
 
     }
@@ -123,7 +139,7 @@ class Transaktionen
             die("Connection failed: " . $conn->connect_error);
         }
 
-        $sql = "SELECT * FROM Transactions WHERE id LIKE $userid ORDER BY id DESC LIMIT 5";
+        $sql = "SELECT * FROM Transactions WHERE sendinguserid LIKE $userid ORDER BY id DESC LIMIT 5";
         $result = mysqli_query($conn, $sql);
 
         if (mysqli_num_rows($result) > 0) {
@@ -131,9 +147,9 @@ class Transaktionen
             foreach($result as $row) {
                 $tablerow = '<tr>
                         <td>'.$row['transactiondate'].'</td>
-                        <td>'.$row['sendinguserIBAN']. '</td>
-                        <td>'.$row['sendinguserBIC']. '</td>
-                        <td>'.$row['receivinguserIBAN']. '</td>
+                        <td>'.$row['sendinguserIBAN'].'</td>
+                        <td>'.$row['sendinguserBIC'].'</td>
+                        <td>'.$row['receivinguserIBAN'].'</td>
                         <td>'.$row['receivinguserBIC'] .'</td>
                         <td>'.$row['reference'] .'</td>
                         <td>'.$row['reason'].'</td>
@@ -144,7 +160,80 @@ class Transaktionen
             }
 
             echo $table;
+            unset($table);
         } 
+        $conn->close();
+    }
+
+    function getTableRecentTransactionsUserLimitFive()
+    {
+        // Create connection
+        $conn = new mysqli($this->servername, $this->username, $this->password, $this->dbname);
+        // Check connection
+
+        if ($conn->connect_error) {
+            die("Connection failed: " . $conn->connect_error);
+        }
+
+        $sql = "SELECT * FROM Transactions ORDER BY id DESC LIMIT 5";
+        $result = mysqli_query($conn, $sql);
+
+        if (mysqli_num_rows($result) > 0) {
+            $table = '';
+            foreach ($result as $row) {
+                $tablerow = '<tr>
+                        <td>' . $row['transactiondate'] . '</td>
+                        <td>' . $row['sendinguserIBAN'] . '</td>
+                        <td>' . $row['sendinguserBIC'] . '</td>
+                        <td>' . $row['receivinguserIBAN'] . '</td>
+                        <td>' . $row['receivinguserBIC'] . '</td>
+                        <td>' . $row['reference'] . '</td>
+                        <td>' . $row['reason'] . '</td>
+                        <td>' . $row['amount'] . '€</td>
+                        </tr>';
+
+                $table .= $tablerow;
+            }
+
+            echo $table;
+            unset($table);
+        }
+        $conn->close();
+    }
+
+    function getTableRecentTransactionsAll()
+    {
+        // Create connection
+        $conn = new mysqli($this->servername, $this->username, $this->password, $this->dbname);
+        // Check connection
+
+        if ($conn->connect_error) {
+            die("Connection failed: " . $conn->connect_error);
+        }
+
+        $sql = "SELECT * FROM Transactions";
+        $result = mysqli_query($conn, $sql);
+
+        if (mysqli_num_rows($result) > 0) {
+            $table = '';
+            foreach ($result as $row) {
+                $tablerow = '<tr>
+                        <td>' . $row['transactiondate'] . '</td>
+                        <td>' . $row['sendinguserIBAN'] . '</td>
+                        <td>' . $row['sendinguserBIC'] . '</td>
+                        <td>' . $row['receivinguserIBAN'] . '</td>
+                        <td>' . $row['receivinguserBIC'] . '</td>
+                        <td>' . $row['reference'] . '</td>
+                        <td>' . $row['reason'] . '</td>
+                        <td>' . $row['amount'] . '€</td>
+                        </tr>';
+
+                $table .= $tablerow;
+            }
+
+            echo $table;
+            unset($table);
+        }
         $conn->close();
     }
 
