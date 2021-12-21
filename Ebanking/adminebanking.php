@@ -75,7 +75,7 @@
         </div>
         <div class="row">
             <div class="col-sm-11 border rounded m-1 p-3" style="max-height: 22em">
-                <h3 style="text-align: center">Letzte Transaktionen von Usern</h3>
+                <h2 style="text-align: center">Letzte Transaktionen von Usern</h2>
                 <div class="table-responsive" style="max-height: 17em">
                     <table class="table table-hover table-striped">
                         <thead class="thead-dark" style="position: sticky;">
@@ -169,12 +169,13 @@
                 $sendinguser = isset($_SESSION['getData']['id']) ? $_SESSION['getData']['id'] : '';
                 $recieveinguser = isset($_POST['recipient']) ? $_POST['recipient'] : '';
                 $amount = isset($_POST['amount']) ? $_POST['amount'] : '';
-                $tran->makeTransaction($recieveinguser, $amount, $sendinguser);
+                $reason = isset($_POST['reason']) ? $_POST['reason'] : '';
+                $tran->makeTransaction($amount, $sendinguser, $recieveinguser, $reason);
             }
             if (isset($_POST['transactionHistory'])) { ?>
                 <div class="col-sm-11 border rounded m-1 p-3" style="max-height: 30em">
-                    <h3 style="text-align: center">Überweisungshistorie</h3>
-                    <div class="row ">
+                    <h2 style="text-align: center">Überweisungshistorie</h2>
+                    <div class="row">
                         <div class="col-sm-2">
                             <form name="sortByDate" action="adminebanking.php" method="post">
                                 <label for="sortByDate">Von</label>

@@ -21,14 +21,17 @@ class Transaktionen
         $sql = "CREATE TABLE Transactions (
                 id INT(10) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
                 transactiondate TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP NOT NULL,
-                useriban VARCHAR(21) NOT NULL,
                 amount FLOAT NOT NULL,
-                sendinguser INT(6) UNSIGNED,
-                receivinguser INT(6) UNSIGNED,
+                sendinguserId INT(6) UNSIGNED NOT NULL,
+                sendinguserIBAN VARCHAR(22) NOT NULL,
+                sendinguserBIC VARCHAR(12) NOT NULL,
+                receivinguserId INT(6) UNSIGNED NOT NULL,
+                receivinguserIBAN VARCHAR(22) NOT NULL,
+                receivinguserBIC VARCHAR(12) NOT NULL,
                 reason VARCHAR(255) NOT NULL,
-                reference VARCHAR(255) NOT NULL,
-                FOREIGN KEY (receivinguser) REFERENCES Users(id),
-                FOREIGN KEY (receivinguser) REFERENCES Users(id)
+                reference VARCHAR(35) NOT NULL,
+                FOREIGN KEY (sendinguserId) REFERENCES Users(id),
+                FOREIGN KEY (receivinguserId) REFERENCES Users(id)
                 )";
 
         $conn->query($sql);
@@ -36,33 +39,40 @@ class Transaktionen
         $conn->close();
     }
 
-    function makeTransaction($useriban, $amount, $sendinguser)
+    function makeTransaction($amount, $sendingUserId, $receivingUserIBAN, $reason)
     {
 
         $this->createTable();
 
         // Create connection
-        $conn = new mysqli($this->servername, $this->username, $this->password);
+        $conn = new mysqli($this->servername, $this->username, $this->password, $this->dbname);
         // Check connection
         if ($conn->connect_error) {
             die("Connection failed: " . $conn->connect_error);
         }
 
-        $userid = $this->getUserIdIBAN($useriban);
+        $receivingUserId = $this->getUserIdIBAN($receivingUserIBAN);
 
-        if ($userid != $sendinguser && $this->userExists($useriban)) {
+        if ($receivingUserId != $sendingUserId && $this->userExists($receivingUserIBAN)) {
 
-            $sql = "INSERT INTO E_Banking.Transactions (`useriban`, `amount`, `receivinguser`, `sendinguser`)
-            VALUES ('$useriban', '$amount', '$userid', '$sendinguser')";
+            $sendingUserIBAN = $this->getUserIBANId($sendingUserId);
+            $sendingUserBIC = $this->getUserBICId($sendingUserId);
+            $receivingUserBIC = $this->getUserBICId($receivingUserId);
+            $reference = $this->generateReference();
+
+            $sql = "INSERT INTO Transactions (`amount`, `sendinguserId`, `sendinguserIBAN`, `sendinguserBIC`, `receivinguserId`, `receivinguserIBAN`, `receivinguserBIC`, `reason`, `reference`)
+            VALUES ('$amount', '$sendingUserId', '$sendingUserIBAN', '$sendingUserBIC', '$receivingUserId','$receivingUserIBAN', '$receivingUserBIC', '$reason', '$reference')";
 
             $conn->query($sql);
-?>
+
+            /* echo $conn->query($sql); */
+        ?>
             <div class="alert alert-success col-sm-11 m-1" style="text-align: center;">
                 <h2>Transaktion Erfolgreich!</h2>
-                <p>Es wurden <?php echo $amount ?>€ an das Konto mit dem IBAN: <?php echo $useriban ?> gesendet.</p>
+                <p>Es wurden <?php echo $amount ?>€ an das Konto mit dem IBAN: <?php echo $receivingUserIBAN ?> gesendet.</p>
             </div>
         <?php
-        } else if ($userid == $sendinguser) {
+        } else if ($receivingUserId == $sendingUserId) {
         ?>
             <div class="alert alert-danger col-sm-11 m-1" style="text-align: center;">
                 <h2>Achtung!</h2>
@@ -73,10 +83,10 @@ class Transaktionen
         ?>
             <div class="alert alert-warning col-sm-11 m-1" style="text-align: center;">
                 <h3>Achtung!</h3>
-                <p>Es existiert kein Konto mit dem IBAN: <?php echo $useriban ?>!</p>
+                <p>Es existiert kein Konto mit dem IBAN: <?php echo $receivingUserIBAN ?>!</p>
                 <p>Überweisung wurde Abgebrochen!</p>
             </div>
-<?php
+        <?php
         }
 
         $conn->close();
@@ -113,22 +123,28 @@ class Transaktionen
             die("Connection failed: " . $conn->connect_error);
         }
 
-        $sql = "SELECT * FROM Users WHERE id LIKE $userid ORDER BY id DESC LIMIT 5";
+        $sql = "SELECT * FROM Transactions WHERE id LIKE $userid ORDER BY id DESC LIMIT 5";
         $result = mysqli_query($conn, $sql);
 
         if (mysqli_num_rows($result) > 0) {
+            $table = '';
             foreach($result as $row) {
-                return '<tr>
+                $tablerow = '<tr>
                         <td>'.$row['transactiondate'].'</td>
-                        <td>'.$this->getUserIBANId($row['sendinguser']).'</td>
-                        <td>'.$this->getUserIBANId($row['receivinguser']).'</td>
+                        <td>'.$row['sendinguserIBAN']. '</td>
+                        <td>'.$row['sendinguserBIC']. '</td>
+                        <td>'.$row['receivinguserIBAN']. '</td>
+                        <td>'.$row['receivinguserBIC'] .'</td>
+                        <td>'.$row['reference'] .'</td>
                         <td>'.$row['reason'].'</td>
-                        <td>'.$row['amount'].'</td>
+                        <td>'.$row['amount'].'€</td>
                         </tr>';
-            }
-            return mysqli_fetch_assoc($result)['id'];
-        }
 
+                $table .= $tablerow;
+            }
+
+            echo $table;
+        } 
         $conn->close();
     }
 
@@ -192,5 +208,41 @@ class Transaktionen
         if (mysqli_num_rows($result) > 0) {
             return mysqli_fetch_assoc($result)['useriban'];
         }
+
+        $conn->close();
+    }
+
+    function getUserBICId ($userid) 
+    {
+        // Create connection
+        $conn = new mysqli($this->servername, $this->username, $this->password, $this->dbname);
+        // Check connection
+
+        if ($conn->connect_error) {
+            die("Connection failed: " . $conn->connect_error);
+        }
+
+        $sql = "SELECT userbic FROM Users WHERE id LIKE '$userid'";
+        $result = mysqli_query($conn, $sql);
+
+        if (mysqli_num_rows($result) > 0) {
+            return mysqli_fetch_assoc($result)['userbic'];
+        }
+
+        $conn->close();
+    }
+
+    function generateReference()
+    {
+        $length = 35;
+        $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        $charactersLength = strlen($characters);
+        $reference = '';
+        for ($i = 0; $i < $length; $i++) {
+            $reference .= $characters[rand(0, $charactersLength - 1)];
+        }
+        return $reference;
     }
 }
+
+?>
