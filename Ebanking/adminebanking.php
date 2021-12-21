@@ -96,7 +96,7 @@
                         </thead>
                         <tbody>
                             <?php
-                                $tran->getTableRecentTransactionsUserLimitFive();
+                            $tran->getTableRecentTransactionsUserLimitFive();
                             ?>
                         </tbody>
                     </table>
@@ -116,6 +116,10 @@
                         <div class="form-group pt-2 pb-1">
                             <label for="amount">Betrag in €</label>
                             <input type="text" class="form-control" id="amount" name="amount" value="<?= htmlspecialchars("") ?>" placeholder="0.00">
+                        </div>
+                        <div class="form-group pt-2 pb-1">
+                            <label for="reason">Zweck</label>
+                            <input type="text" class="form-control" id="reason" name="reason" value="<?= htmlspecialchars("") ?>" placeholder="Schwarzgeld">
                         </div>
                         <button type="submit" name="transfer" class="btn btn-primary mb-2 mt-2">Überweisen</button>
                     </div>

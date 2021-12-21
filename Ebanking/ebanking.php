@@ -23,7 +23,7 @@
     $db = new Database();
     $tran = new Transaktionen();
 
-    if (isset($_GET['id']) && $_SESSION['isLoggedIn'][$_GET['id']] == true) {
+    if ((isset($_GET['id'])) && $_SESSION['isLoggedIn'][$_GET['id']] == true) {
         $id = $_GET['id'];
         $data = $db->getAccountData($id);
         $_SESSION['getData'] = $data;
@@ -31,7 +31,7 @@
             session_destroy();
             header("Location: ../index.php");
         }
-    } else if ($_SESSION['isLoggedIn']['id'] == false) {
+    } else if ($_SESSION['isLoggedIn']['id'] == false || $_SESSION['isLoggedIn']['id'] != $_GET['id']) {
         session_destroy();
         header("Location: ../index.php");
     }
@@ -86,31 +86,11 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <td>12.12.2021</td>
-                                <td>AT-123465436324</td>
-                                <td>-350.00€</td>
-                            </tr>
-                            <tr>
-                                <td>15.12.2021</td>
-                                <td>AT-12309638324</td>
-                                <td>-100.00€</td>
-                            </tr>
-                            <tr>
-                                <td>01.02.2022</td>
-                                <td>AT-12348395324</td>
-                                <td>700.00€</td>
-                            </tr>
-                            <tr>
-                                <td>01.02.2022</td>
-                                <td>AT-12348395324</td>
-                                <td>700.00€</td>
-                            </tr>
-                            <tr>
-                                <td>01.02.2022</td>
-                                <td>AT-12348395324</td>
-                                <td>700.00€</td>
-                            </tr>
+                            <?php
+                            if ($tran->idIsSender($_GET['id']) || $tran->idIsRecipient($_GET['id'])) {
+                                $tran->getTableRecentTransactionsUser($_GET['id']);
+                            }
+                            ?>
                         </tbody>
                     </table>
                 </div>
@@ -206,7 +186,11 @@
                                         <th scope="col">Betrag</td>
                                     </tr>
                                 </thead>
-                                <?php $tran->getTableRecentTransactionsAllUser(isset($_SESSION['getData']['id'])) ?>
+                                <?php 
+                                if($tran->idIsSender($_GET['id']) || $tran->idIsRecipient($_GET['id'])){
+                                    $tran->getTableRecentTransactionsAllUser($_GET['id']);
+                                }
+                                ?>
                             </table>
                         </div>
 

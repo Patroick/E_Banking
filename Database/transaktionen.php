@@ -102,9 +102,8 @@ class Transaktionen
             die("Connection failed: " . $conn->connect_error);
         }
 
-        $sql = "SELECT * FROM Transactions WHERE sendinguserid = $userid";
+        $sql = "SELECT * FROM Transactions WHERE sendinguserid LIKE $userid OR receivinguserId LIKE $userid";
         $result = mysqli_query($conn, $sql);
-
         if (mysqli_num_rows($result) > 0) {
             $table = '';
             foreach ($result as $row) {
@@ -139,7 +138,7 @@ class Transaktionen
             die("Connection failed: " . $conn->connect_error);
         }
 
-        $sql = "SELECT * FROM Transactions WHERE sendinguserid LIKE $userid ORDER BY id DESC LIMIT 5";
+        $sql = "SELECT * FROM Transactions WHERE sendinguserId LIKE $userid OR receivinguserId LIKE $userid ORDER BY id DESC LIMIT 5";
         $result = mysqli_query($conn, $sql);
 
         if (mysqli_num_rows($result) > 0) {
@@ -147,12 +146,7 @@ class Transaktionen
             foreach($result as $row) {
                 $tablerow = '<tr>
                         <td>'.$row['transactiondate'].'</td>
-                        <td>'.$row['sendinguserIBAN'].'</td>
-                        <td>'.$row['sendinguserBIC'].'</td>
                         <td>'.$row['receivinguserIBAN'].'</td>
-                        <td>'.$row['receivinguserBIC'] .'</td>
-                        <td>'.$row['reference'] .'</td>
-                        <td>'.$row['reason'].'</td>
                         <td>'.$row['amount'].'€</td>
                         </tr>';
 
@@ -331,6 +325,50 @@ class Transaktionen
             $reference .= $characters[rand(0, $charactersLength - 1)];
         }
         return $reference;
+    }
+
+    function idIsSender($userid) 
+    {
+        // Create connection
+        $conn = new mysqli($this->servername, $this->username, $this->password, $this->dbname);
+        // Check connection
+
+        if ($conn->connect_error) {
+            die("Connection failed: " . $conn->connect_error);
+        }
+
+        $sql = "SELECT id FROM Transactions WHERE sendinguserId LIKE '$userid'";
+        $result = mysqli_query($conn, $sql);
+
+        if (mysqli_num_rows($result) > 0) {
+            return true;
+        } else {
+            return false;
+        }
+
+        $conn->close();
+    }
+
+    function idIsRecipient($userid)
+    {
+        // Create connection
+        $conn = new mysqli($this->servername, $this->username, $this->password, $this->dbname);
+        // Check connection
+
+        if ($conn->connect_error) {
+            die("Connection failed: " . $conn->connect_error);
+        }
+
+        $sql = "SELECT id FROM Transactions WHERE receivinguserId LIKE '$userid'";
+        $result = mysqli_query($conn, $sql);
+
+        if (mysqli_num_rows($result) > 0) {
+            return true;
+        } else {
+            return false;
+        }
+
+        $conn->close();
     }
 }
 
