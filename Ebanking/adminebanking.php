@@ -165,7 +165,7 @@
                                 </form>
                                 <form name="sortByReference" action="adminebanking.php" method="post">
                                     <label for="sortByReference">Zahlungsreferenz</label>
-                                    <input type="text" name="sortByReference" class="form-control" placeholder="1100XXXXXXXX">
+                                    <input type="text" name="sortByReference" class="form-control" placeholder="PzGss9d3U1YlmogEzaMvde9Oc2OfgTdAPcv">
                                 </form>
                             </div>
                         </div>

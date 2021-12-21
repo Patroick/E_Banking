@@ -129,70 +129,70 @@
             if (isset($_POST['transactionHistory'])) { ?>
                 <div class="col-sm-11 border rounded m-1 p-3" style="max-height: 30em">
                     <h2 style="text-align: center">Überweisungshistorie</h2>
-                        <div class="row ">
-                            <div class="col-sm-2">
-                                <form name="sortByDate" action="adminebanking.php" method="post">
-                                    <label for="sortByDate">Von</label>
-                                    <input type="date" name="sortByDate" class="form-control">
-                                    <label for="sortByDate">Bis</label>
-                                    <input type="date" name="sortByDate" class="form-control">
+                    <div class="row ">
+                        <div class="col-sm-2">
+                            <form name="sortByDate" action="adminebanking.php" method="post">
+                                <label for="sortByDate">Von</label>
+                                <input type="date" name="sortByDate" class="form-control">
+                                <label for="sortByDate">Bis</label>
+                                <input type="date" name="sortByDate" class="form-control">
+                            </form>
+                        </div>
+                        <div class="col-sm-4">
+                            <div class="row">
+                                <form name="sortByText" action="adminebanking.php" method="post">
+                                    <label for="sortByText">IBAN</label>
+                                    <input type="text" name="sortByText" class="form-control" placeholder="AT-XXXXXXXXXXXXXXXXXX">
+                                </form>
+                                <form name="sortByText" action="adminebanking.php" method="post">
+                                    <label for="sortByText">BIC</label>
+                                    <input type="text" name="sortByText" class="form-control" placeholder="ING-DIBA">
                                 </form>
                             </div>
-                            <div class="col-sm-4">
-                                <div class="row">
-                                    <form name="sortByText" action="adminebanking.php" method="post">
-                                        <label for="sortByText">IBAN</label>
-                                        <input type="text" name="sortByText" class="form-control" placeholder="AT-XXXXXXXXXXXXXXXXXX">
-                                    </form>
-                                    <form name="sortByText" action="adminebanking.php" method="post">
-                                        <label for="sortByText">BIC</label>
-                                        <input type="text" name="sortByText" class="form-control" placeholder="ING-DIBA">
-                                    </form>
-                                </div>
-                            </div>
-                            <div class="col-sm-4">
-                                <div class="row">
-                                    <form name="sortByReason" action="adminebanking.php" method="post">
-                                        <label for="sortByReason">Zweck</label>
-                                        <input type="text" name="sortByReason" class="form-control" placeholder="Schwarzgeld">
-                                    </form>
-                                    <form name="sortByReference" action="adminebanking.php" method="post">
-                                        <label for="sortByReference">Zahlungsreferenz</label>
-                                        <input type="text" name="sortByReference" class="form-control" placeholder="1100XXXXXXXX">
-                                    </form>
-                                </div>
-                            </div>
-                            <div class="col-sm-2">
-                                <form name="sortByDate" action="adminebanking.php" method="post">
-                                    <label for="sortByAmount">Min</label>
-                                    <input type="text" name="sortByAmount" class="form-control" placeholder="0.00">
-                                    <label for="sortByAmount">Max</label>
-                                    <input type="text" name="sortByDate" class="form-control" placeholder="0.00">
+                        </div>
+                        <div class="col-sm-4">
+                            <div class="row">
+                                <form name="sortByReason" action="adminebanking.php" method="post">
+                                    <label for="sortByReason">Zweck</label>
+                                    <input type="text" name="sortByReason" class="form-control" placeholder="Schwarzgeld">
+                                </form>
+                                <form name="sortByReference" action="adminebanking.php" method="post">
+                                    <label for="sortByReference">Zahlungsreferenz</label>
+                                    <input type="text" name="sortByReference" class="form-control" placeholder="wQhMr8WjNGT7n1GSbKzalSpp3t77RtTRKeJ">
                                 </form>
                             </div>
+                        </div>
+                        <div class="col-sm-2">
+                            <form name="sortByDate" action="adminebanking.php" method="post">
+                                <label for="sortByAmount">Min</label>
+                                <input type="text" name="sortByAmount" class="form-control" placeholder="0.00">
+                                <label for="sortByAmount">Max</label>
+                                <input type="text" name="sortByDate" class="form-control" placeholder="0.00">
+                            </form>
+                        </div>
 
-                        </div>
-                        <div class="table-responsive mt-3" style="max-height: 17em">
-                            <table class="table table-hover table-striped">
-                                <thead class="thead-dark" style="position: sticky;">
-                                    <tr>
-                                        <th scope="col">Datum</td>
-                                        <th scope="col">Sender</td>
-                                        <th scope="col">BIC</td>
-                                        <th scope="col">Empfänger</td>
-                                        <th scope="col">BIC</td>
-                                        <th scope="col">Zahlungsreferenz</td>
-                                        <th scope="col">Zweck</td>
-                                        <th scope="col">Betrag</td>
-                                    </tr>
-                                </thead>
-                                <?php 
-                                if($tran->idIsSender($_GET['id']) || $tran->idIsRecipient($_GET['id'])){
-                                    $tran->getTableRecentTransactionsAllUser($_GET['id']);
-                                }
-                                ?>
-                            </table>
-                        </div>
+                    </div>
+                    <div class="table-responsive mt-3" style="max-height: 17em">
+                        <table class="table table-hover table-striped">
+                            <thead class="thead-dark" style="position: sticky;">
+                                <tr>
+                                    <th scope="col">Datum</td>
+                                    <th scope="col">Sender</td>
+                                    <th scope="col">BIC</td>
+                                    <th scope="col">Empfänger</td>
+                                    <th scope="col">BIC</td>
+                                    <th scope="col">Zahlungsreferenz</td>
+                                    <th scope="col">Zweck</td>
+                                    <th scope="col">Betrag</td>
+                                </tr>
+                            </thead>
+                            <?php
+                            if ($tran->idIsSender($_GET['id']) || $tran->idIsRecipient($_GET['id'])) {
+                                $tran->getTableRecentTransactionsAllUser($_GET['id']);
+                            }
+                            ?>
+                        </table>
+                    </div>
 
                 </div>
 
