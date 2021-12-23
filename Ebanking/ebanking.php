@@ -160,20 +160,20 @@
                         <div class="col-sm-2">
                             <form name="sortByDate" action="adminebanking.php" method="post">
                                 <label for="sortByDate">Von</label>
-                                <input type="date" name="sortByDate" class="form-control">
+                                <input type="date" name="sortByDate" id="startDate" class="form-control">
                                 <label for="sortByDate">Bis</label>
-                                <input type="date" name="sortByDate" class="form-control">
+                                <input type="date" name="sortByDate" id="endDate" class="form-control">
                             </form>
                         </div>
                         <div class="col-sm-4">
                             <div class="row">
                                 <form name="sortByText" action="adminebanking.php" method="post">
                                     <label for="sortByText">IBAN</label>
-                                    <input type="text" name="sortByText" class="form-control" placeholder="AT-XXXXXXXXXXXXXXXXXX">
+                                    <input type="text" name="sortByText" id="iban" class="form-control" placeholder="AT-XXXXXXXXXXXXXXXXXX">
                                 </form>
                                 <form name="sortByText" action="adminebanking.php" method="post">
                                     <label for="sortByText">BIC</label>
-                                    <input type="text" name="sortByText" class="form-control" placeholder="ING-DIBA">
+                                    <input type="text" name="sortByText" id="bic" class="form-control" placeholder="ING-DIBA">
                                 </form>
                             </div>
                         </div>
@@ -181,20 +181,20 @@
                             <div class="row">
                                 <form name="sortByReason" action="adminebanking.php" method="post">
                                     <label for="sortByReason">Zweck</label>
-                                    <input type="text" name="sortByReason" class="form-control" placeholder="Schwarzgeld">
+                                    <input type="text" name="sortByReason" id="reason" class="form-control" placeholder="Rechnung">
                                 </form>
                                 <form name="sortByReference" action="adminebanking.php" method="post">
                                     <label for="sortByReference">Zahlungsreferenz</label>
-                                    <input type="text" name="sortByReference" class="form-control" placeholder="wQhMr8WjNGT7n1GSbKzalSpp3t77RtTRKeJ">
+                                    <input type="text" name="sortByReference" id="reference" class="form-control" placeholder="wQhMr8WjNGT7n1GSbKzalSpp3t77RtTRKeJ">
                                 </form>
                             </div>
                         </div>
                         <div class="col-sm-2">
                             <form name="sortByDate" action="adminebanking.php" method="post">
                                 <label for="sortByAmount">Min</label>
-                                <input type="text" name="sortByAmount" class="form-control" placeholder="0.00">
+                                <input type="text" name="sortByAmount" id="minAmount" class="form-control" placeholder="0.00">
                                 <label for="sortByAmount">Max</label>
-                                <input type="text" name="sortByDate" class="form-control" placeholder="0.00">
+                                <input type="text" name="sortByDate" id="maxAmount" class="form-control" placeholder="0.00">
                             </form>
                         </div>
 

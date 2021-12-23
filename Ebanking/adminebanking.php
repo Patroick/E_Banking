@@ -8,6 +8,8 @@
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
 
+    <script> "../js/liveupdate.js" </script>
+
     <title>E-Banking App</title>
 </head>
 
@@ -166,20 +168,20 @@
                         <div class="col-sm-2">
                             <form name="sortByDate" action="adminebanking.php" method="post">
                                 <label for="sortByDate">Von</label>
-                                <input type="date" name="sortByDate" class="form-control">
+                                <input type="date" name="sortByDate" id="startDate" class="form-control" onkeyup="startDateUpdate()">
                                 <label for="sortByDate">Bis</label>
-                                <input type="date" name="sortByDate" class="form-control">
+                                <input type="date" name="sortByDate" id="endDate" class="form-control" onkeyup="endDateUpdate()">
                             </form>
                         </div>
                         <div class="col-sm-4">
                             <div class="row">
-                                <form name="sortByText" action="adminebanking.php" method="post">
+                                <form name="sortByIBAN" action="adminebanking.php" method="post">
                                     <label for="sortByText">IBAN</label>
-                                    <input type="text" name="sortByText" class="form-control" placeholder="AT-XXXXXXXXXXXXXXXXXX">
+                                    <input type="text" name="sortByIBAN" id="iban" class="form-control" placeholder="AT-XXXXXXXXXXXXXXXXXX" onkeyup="ibanUpdate()">
                                 </form>
-                                <form name="sortByText" action="adminebanking.php" method="post">
+                                <form name="sortByBIC" action="adminebanking.php" method="post">
                                     <label for="sortByText">BIC</label>
-                                    <input type="text" name="sortByText" class="form-control" placeholder="ING-DIBA">
+                                    <input type="text" name="sortByText" id="bic" class="form-control" placeholder="ING-DIBA" onkeyup="bicUpdate()">
                                 </form>
                             </div>
                         </div>
@@ -187,20 +189,20 @@
                             <div class="row">
                                 <form name="sortByReason" action="adminebanking.php" method="post">
                                     <label for="sortByReason">Zweck</label>
-                                    <input type="text" name="sortByReason" class="form-control" placeholder="Schwarzgeld">
+                                    <input type="text" name="sortByReason" id="reason" class="form-control" placeholder="Rechnung" onkeyup="reasonUpdate()">
                                 </form>
                                 <form name="sortByReference" action="adminebanking.php" method="post">
                                     <label for="sortByReference">Zahlungsreferenz</label>
-                                    <input type="text" name="sortByReference" class="form-control" placeholder="PzGss9d3U1YlmogEzaMvde9Oc2OfgTdAPcv">
+                                    <input type="text" name="sortByReference" id="reference" class="form-control" placeholder="PzGss9d3U1YlmogEzaMvde9Oc2OfgTdAPcv" onkeyup="referenceUpdate()">
                                 </form>
                             </div>
                         </div>
                         <div class="col-sm-2">
                             <form name="sortByDate" action="adminebanking.php" method="post">
                                 <label for="sortByAmount">Min</label>
-                                <input type="text" name="sortByAmount" class="form-control" placeholder="0.00">
+                                <input type="text" name="sortByAmount" id="minAmount" class="form-control" placeholder="0.00" onkeyup="minAmountUpdate()">
                                 <label for="sortByAmount">Max</label>
-                                <input type="text" name="sortByDate" class="form-control" placeholder="0.00">
+                                <input type="text" name="sortByDate" id="maxAmount" class="form-control" placeholder="0.00" onkeyup="maxAmountUpdate()">
                             </form>
                         </div>
 
