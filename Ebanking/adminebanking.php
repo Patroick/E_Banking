@@ -67,7 +67,7 @@
 
                 <p>Administratoren-Konto</p>
                 <p>Kontostand:
-                        ∞
+                    ∞
                 </p>
                 <form name="transaction" id="transaction" action="adminebanking.php?id=<?php echo $_SESSION['getData']['id']; ?>" method="post">
                     <button type="submit" name="transaction" class="btn btn-primary">Überweisung</button></br></br>
@@ -124,14 +124,40 @@
                         <button type="submit" name="transfer" class="btn btn-primary mb-2 mt-2">Überweisen</button>
                     </div>
                 </form>
-            <?php
+                <?php
             }
             if (isset($_POST['transfer'])) {
                 $sendinguser = isset($_SESSION['getData']['id']) ? $_SESSION['getData']['id'] : '';
                 $recieveinguser = isset($_POST['recipient']) ? $_POST['recipient'] : '';
                 $amount = isset($_POST['amount']) ? $_POST['amount'] : '';
                 $reason = isset($_POST['reason']) ? $_POST['reason'] : '';
-                $tran->makeTransaction($amount, $sendinguser, $recieveinguser, $reason);
+                if (validateAmount($amount) && validateReason($reason) && validateIBAN($recieveinguser)) {
+                    $tran->makeTransaction($amount, $sendinguserId, $recieveinguserIBAN, $reason);
+                } else if (validateAmount($amount) && !validateReason($reason) && validateIBAN($recieveinguser)) {
+                ?>
+                    <div class="alert alert-warning col-sm-11 m-1" style="text-align: center;">
+                        <h3>Achtung!</h3>
+                        <p>Bitte geben Sie einen gültigen Grund ein!</p>
+                        <p>Überweisung wurde Abgebrochen!</p>
+                    </div>
+                <?php
+                } else if (validateAmount($amount) && validateReason($reason) && !validateIBAN($recieveinguser)) {
+                ?>
+                    <div class="alert alert-warning col-sm-11 m-1" style="text-align: center;">
+                        <h3>Achtung!</h3>
+                        <p>Bitte geben Sie einen gültigen IBAN ein!</p>
+                        <p>Überweisung wurde Abgebrochen!</p>
+                    </div>
+                <?php
+                } else {
+                ?>
+                    <div class="alert alert-warning col-sm-11 m-1" style="text-align: center;">
+                        <h3>Achtung!</h3>
+                        <p>Der zu Überweisende Betrag muss Größer als 0€ sein!</p>
+                        <p>Überweisung wurde Abgebrochen!</p>
+                    </div>
+                <?php
+                }
             }
             if (isset($_POST['transactionHistory'])) { ?>
                 <div class="col-sm-11 border rounded m-1 p-3" style="max-height: 30em">

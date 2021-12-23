@@ -19,6 +19,7 @@
 
     require_once("../Database/datenbank.php");
     require("../Database/transaktionen.php");
+    require_once "ebankingvalidation.php";
 
     $db = new Database();
     $tran = new Transaktionen();
@@ -104,27 +105,53 @@
                     <div class="col-sm-11 border rounded m-1 pt-3 container">
                         <div class="form-group">
                             <label for="recipient">IBAN</label>
-                            <input type="text" class="form-control" id="recipient" name="recipient" value="<?= htmlspecialchars("") ?>" placeholder="AT-XXXXXXXXXXXXXXXXXX">
+                            <input type="text" class="form-control" id="recipient" name="recipient" value="<?= htmlspecialchars("") ?>" placeholder="AT-XXXXXXXXXXXXXXXXXX" minlength="21" maxlength="21" required>
                         </div>
                         <div class="form-group pt-2 pb-1">
                             <label for="amount">Betrag in €</label>
-                            <input type="text" class="form-control" id="amount" name="amount" value="<?= htmlspecialchars("") ?>" placeholder="0.00">
+                            <input type="text" class="form-control" id="amount" name="amount" value="<?= htmlspecialchars("") ?>" placeholder="0.00" required>
                         </div>
                         <div class="form-group pt-2 pb-1">
                             <label for="reason">Zweck</label>
-                            <input type="text" class="form-control" id="reason" name="reason" value="<?= htmlspecialchars("") ?>" placeholder="Schwarzgeld">
+                            <input type="text" class="form-control" id="reason" name="reason" value="<?= htmlspecialchars("") ?>" placeholder="Schwarzgeld" minlength="5" maxlength="255" required>
                         </div>
                         <button type="submit" name="transfer" class="btn btn-primary mb-2 mt-2">Überweisen</button>
                     </div>
                 </form>
-            <?php
+                <?php
             }
             if (isset($_POST['transfer'])) {
                 $sendinguserId = isset($_SESSION['getData']['id']) ? $_SESSION['getData']['id'] : '';
                 $recieveinguserIBAN = isset($_POST['recipient']) ? $_POST['recipient'] : '';
                 $amount = isset($_POST['amount']) ? $_POST['amount'] : '';
                 $reason = isset($_POST['reason']) ? $_POST['reason'] : '';
-                $tran->makeTransaction($amount, $sendinguserId, $recieveinguserIBAN, $reason);
+                if (validateAmount($amount) && validateReason($reason) && validateIBAN($recieveinguser)) {
+                    $tran->makeTransaction($amount, $sendinguserId, $recieveinguserIBAN, $reason);
+                } else if (validateAmount($amount) && !validateReason($reason) && validateIBAN($recieveinguser)) {
+                ?>
+                    <div class="alert alert-warning col-sm-11 m-1" style="text-align: center;">
+                        <h3>Achtung!</h3>
+                        <p>Bitte geben Sie einen gültigen Grund ein!</p>
+                        <p>Überweisung wurde Abgebrochen!</p>
+                    </div>
+                <?php
+                } else if (validateAmount($amount) && validateReason($reason) && !validateIBAN($recieveinguser)) {
+                ?>
+                    <div class="alert alert-warning col-sm-11 m-1" style="text-align: center;">
+                        <h3>Achtung!</h3>
+                        <p>Bitte geben Sie einen gültigen IBAN ein!</p>
+                        <p>Überweisung wurde Abgebrochen!</p>
+                    </div>
+                <?php
+                } else {
+                ?>
+                    <div class="alert alert-warning col-sm-11 m-1" style="text-align: center;">
+                        <h3>Achtung!</h3>
+                        <p>Der zu Überweisende Betrag muss Größer als 0€ sein!</p>
+                        <p>Überweisung wurde Abgebrochen!</p>
+                    </div>
+                <?php
+                }
             }
             if (isset($_POST['transactionHistory'])) { ?>
                 <div class="col-sm-11 border rounded m-1 p-3" style="max-height: 30em">
