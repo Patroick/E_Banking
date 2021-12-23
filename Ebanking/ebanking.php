@@ -125,9 +125,9 @@
                 $recieveinguserIBAN = isset($_POST['recipient']) ? $_POST['recipient'] : '';
                 $amount = isset($_POST['amount']) ? $_POST['amount'] : '';
                 $reason = isset($_POST['reason']) ? $_POST['reason'] : '';
-                if (validateAmount($amount) && validateReason($reason) && validateIBAN($recieveinguser)) {
+                if (validateAmount($amount) && validateReason($reason) && validateIBAN($recieveinguserIBAN)) {
                     $tran->makeTransaction($amount, $sendinguserId, $recieveinguserIBAN, $reason);
-                } else if (validateAmount($amount) && !validateReason($reason) && validateIBAN($recieveinguser)) {
+                } else if (validateAmount($amount) && !validateReason($reason) && validateIBAN($recieveinguserIBAN)) {
                 ?>
                     <div class="alert alert-warning col-sm-11 m-1" style="text-align: center;">
                         <h3>Achtung!</h3>
@@ -135,7 +135,7 @@
                         <p>Überweisung wurde Abgebrochen!</p>
                     </div>
                 <?php
-                } else if (validateAmount($amount) && validateReason($reason) && !validateIBAN($recieveinguser)) {
+                } else if (validateAmount($amount) && validateReason($reason) && !validateIBAN($recieveinguserIBAN)) {
                 ?>
                     <div class="alert alert-warning col-sm-11 m-1" style="text-align: center;">
                         <h3>Achtung!</h3>
