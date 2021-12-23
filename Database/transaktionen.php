@@ -66,13 +66,15 @@ class Transaktionen
 
                 $conn->query($sql);
 
-                $sql = "UPDATE Users SET userbalance = userbalance + $amount WHERE id = $receivingUserId";
+                $sql = "UPDATE Users SET userbalance = userbalance + $amount WHERE id = $receivingUserId"; 
 
                 $conn->query($sql);
 
-                $sql = "UPDATE Users SET userbalance = userbalance - $amount WHERE id = $sendingUserId";
+                if($this->getUserRole($sendingUserId) == "User"){
+                    $sql = "UPDATE Users SET userbalance = userbalance - $amount WHERE id = $sendingUserId";
+                    $conn->query($sql);
+                }
 
-                $conn->query($sql);
 ?>
                 <div class="alert alert-success col-sm-11 m-1" style="text-align: center;">
                     <h2>Transaktion Erfolgreich!</h2>
