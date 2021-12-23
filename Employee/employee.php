@@ -18,6 +18,7 @@
     session_start();
 
     require_once "../Database/datenbank.php";
+    require_once "../loginValidation.php";
 
     $email = '';
     $password = '';
@@ -28,16 +29,25 @@
         $email = isset($_POST['email']) ? $_POST['email'] : '';
         $password = isset($_POST['password']) ? $_POST['password'] : '';
 
-        if ($db->checkLoginEmployee($email, $password)) {
-            print_r("here");
-            $_SESSION['isLoggedIn'][$db->getAccountId($email, $password)] = true;
-            header("Location: ../Ebanking/adminebanking.php?id=" . $db->getAccountId($email, $password));
+        if(validateEmail($email) && validatePassword($password)){
+            if ($db->checkLoginEmployee($email, $password)) {
+                print_r("here");
+                $_SESSION['isLoggedIn'][$db->getAccountId($email, $password)] = true;
+                header("Location: ../Ebanking/adminebanking.php?id=" . $db->getAccountId($email, $password));
+            } else {
+                $message = "<p style='color: red'>Die eingegebenen Daten sind fehlerhaft!</p>";
+                foreach ($errors as $key => $value) {
+                    echo "<li>" . $value . "</li>";
+                }
+            }
         } else {
             $message = "<p style='color: red'>Die eingegebenen Daten sind fehlerhaft!</p>";
             foreach ($errors as $key => $value) {
                 echo "<li>" . $value . "</li>";
             }
         }
+
+        
     }
 
     if (isset($_POST['goBack'])) {

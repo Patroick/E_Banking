@@ -67,7 +67,7 @@
 
                 <p>Administratoren-Konto</p>
                 <p>Kontostand:
-                    <!-- <?php echo $_SESSION['getData']['userbalance']; ?> -->∞
+                        ∞
                 </p>
                 <form name="transaction" id="transaction" action="adminebanking.php?id=<?php echo $_SESSION['getData']['id']; ?>" method="post">
                     <button type="submit" name="transaction" class="btn btn-primary">Überweisung</button></br></br>

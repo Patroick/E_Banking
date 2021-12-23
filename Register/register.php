@@ -16,6 +16,7 @@
     <?php
 
     require "../Database/datenbank.php";
+    require "registervalidation.php";
 
     session_start();
 
@@ -32,8 +33,12 @@
         $lastname = isset($_POST['lastname']) ? $_POST['lastname'] : '';
         $email = isset($_POST['email']) ? $_POST['email'] : '';
         $password = isset($_POST['password']) ? $_POST['password'] : '';
-        $_SESSION['registered'] = 'Sie wurden erfolgreich registriert';
-        $db->addUser($firstname, $lastname, $email, $password);
+        if(validateName($firstname) && validateName($lastname) && validateEmail($email) && validatePassword($password)){
+            $_SESSION['registered'] = 'Sie wurden erfolgreich registriert';
+            $db->addUser($firstname, $lastname, $email, $password);
+        } else {
+            $_SESSION['registered'] = 'Fehler bei der Registrierung';
+        }
         header("Location: ../index.php");
     }
 

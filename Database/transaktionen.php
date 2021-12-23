@@ -60,35 +60,52 @@ class Transaktionen
             $receivingUserBIC = $this->getUserBICId($receivingUserId);
             $reference = $this->generateReference();
 
-            $sql = "INSERT INTO Transactions (`amount`, `sendinguserId`, `sendinguserIBAN`, `sendinguserBIC`, `receivinguserId`, `receivinguserIBAN`, `receivinguserBIC`, `reason`, `reference`)
-            VALUES ('$amount', '$sendingUserId', '$sendingUserIBAN', '$sendingUserBIC', '$receivingUserId','$receivingUserIBAN', '$receivingUserBIC', '$reason', '$reference')";
+            if ($this->getUserRole($sendingUserId) == "Employee" || ($this->getUserRole($sendingUserId) == "User" && $this->getUserAccountBalance($sendingUserId) >= $amount)) {
+                $sql = "INSERT INTO Transactions (`amount`, `sendinguserId`, `sendinguserIBAN`, `sendinguserBIC`, `receivinguserId`, `receivinguserIBAN`, `receivinguserBIC`, `reason`, `reference`)
+                VALUES ('$amount', '$sendingUserId', '$sendingUserIBAN', '$sendingUserBIC', '$receivingUserId','$receivingUserIBAN', '$receivingUserBIC', '$reason', '$reference')";
 
-            $conn->query($sql);
+                $conn->query($sql);
 
-            /* echo $conn->query($sql); */
-        ?>
-            <div class="alert alert-success col-sm-11 m-1" style="text-align: center;">
-                <h2>Transaktion Erfolgreich!</h2>
-                <p>Es wurden <?php echo $amount ?>€ an das Konto mit dem IBAN: <?php echo $receivingUserIBAN ?> gesendet.</p>
-            </div>
-        <?php
-        } else if ($receivingUserId == $sendingUserId) {
-        ?>
-            <div class="alert alert-danger col-sm-11 m-1" style="text-align: center;">
-                <h2>Achtung!</h2>
-                <p>Sie können kein Geld auf Ihr eigenes Konto senden!</p>
-            </div>
-        <?php
-        } else {
-        ?>
-            <div class="alert alert-warning col-sm-11 m-1" style="text-align: center;">
-                <h3>Achtung!</h3>
-                <p>Es existiert kein Konto mit dem IBAN: <?php echo $receivingUserIBAN ?>!</p>
-                <p>Überweisung wurde Abgebrochen!</p>
-            </div>
-        <?php
-        }
+                $sql = "UPDATE Users SET userbalance = userbalance + $amount WHERE id = $receivingUserId";
 
+                $conn->query($sql);
+
+                $sql = "UPDATE Users SET userbalance = userbalance - $amount WHERE id = $sendingUserId";
+
+                $conn->query($sql);
+?>
+                <div class="alert alert-success col-sm-11 m-1" style="text-align: center;">
+                    <h2>Transaktion Erfolgreich!</h2>
+                    <p>Es wurden <?php echo $amount ?>€ an das Konto mit dem IBAN: <?php echo $receivingUserIBAN ?> gesendet.</p>
+                </div>
+            <?php
+            } else {
+                ?>
+                    <div class="alert alert-danger col-sm-11 m-1" style="text-align: center;">
+                        <h2>Achtung!</h2>
+                        <p>Sie verfügen nicht über genug Geld auf Ihrem Konto für diese Transaktion!</p>
+                    </div>
+<?php
+            }
+            
+            
+            } else if ($receivingUserId == $sendingUserId) {
+            ?>
+                <div class="alert alert-danger col-sm-11 m-1" style="text-align: center;">
+                    <h2>Achtung!</h2>
+                    <p>Sie können kein Geld auf Ihr eigenes Konto senden!</p>
+                </div>
+            <?php
+            } else {
+            ?>
+                <div class="alert alert-warning col-sm-11 m-1" style="text-align: center;">
+                    <h3>Achtung!</h3>
+                    <p>Es existiert kein Konto mit dem IBAN: <?php echo $receivingUserIBAN ?>!</p>
+                    <p>Überweisung wurde Abgebrochen!</p>
+                </div>
+                <?php
+            } 
+            
         $conn->close();
     }
 
@@ -125,7 +142,6 @@ class Transaktionen
             unset($table);
         }
         $conn->close();
-
     }
 
     function getTableRecentTransactionsUser($userid)
@@ -143,11 +159,11 @@ class Transaktionen
 
         if (mysqli_num_rows($result) > 0) {
             $table = '';
-            foreach($result as $row) {
+            foreach ($result as $row) {
                 $tablerow = '<tr>
-                        <td>'.$row['transactiondate'].'</td>
-                        <td>'.$row['receivinguserIBAN'].'</td>
-                        <td>'.$row['amount'].'€</td>
+                        <td>' . $row['transactiondate'] . '</td>
+                        <td>' . $row['receivinguserIBAN'] . '</td>
+                        <td>' . $row['amount'] . '€</td>
                         </tr>';
 
                 $table .= $tablerow;
@@ -155,7 +171,7 @@ class Transaktionen
 
             echo $table;
             unset($table);
-        } 
+        }
         $conn->close();
     }
 
@@ -275,7 +291,7 @@ class Transaktionen
         $conn->close();
     }
 
-    function getUserIBANId ($userid)
+    function getUserIBANId($userid)
     {
         // Create connection
         $conn = new mysqli($this->servername, $this->username, $this->password, $this->dbname);
@@ -295,7 +311,7 @@ class Transaktionen
         $conn->close();
     }
 
-    function getUserBICId ($userid) 
+    function getUserBICId($userid)
     {
         // Create connection
         $conn = new mysqli($this->servername, $this->username, $this->password, $this->dbname);
@@ -327,7 +343,7 @@ class Transaktionen
         return $reference;
     }
 
-    function idIsSender($userid) 
+    function idIsSender($userid)
     {
         // Create connection
         $conn = new mysqli($this->servername, $this->username, $this->password, $this->dbname);
@@ -366,6 +382,46 @@ class Transaktionen
             return true;
         } else {
             return false;
+        }
+
+        $conn->close();
+    }
+
+    function getUserRole($userid)
+    {
+        // Create connection
+        $conn = new mysqli($this->servername, $this->username, $this->password, $this->dbname);
+        // Check connection
+
+        if ($conn->connect_error) {
+            die("Connection failed: " . $conn->connect_error);
+        }
+
+        $sql = "SELECT userrole FROM Users WHERE id LIKE '$userid'";
+        $result = mysqli_query($conn, $sql);
+
+        if (mysqli_num_rows($result) > 0) {
+            return $result->fetch_assoc()['userrole'];
+        }
+
+        $conn->close();
+    }
+
+    function getUserAccountBalance($userid)
+    {
+        // Create connection
+        $conn = new mysqli($this->servername, $this->username, $this->password, $this->dbname);
+        // Check connection
+
+        if ($conn->connect_error) {
+            die("Connection failed: " . $conn->connect_error);
+        }
+
+        $sql = "SELECT userbalance FROM Users WHERE id LIKE '$userid'";
+        $result = mysqli_query($conn, $sql);
+
+        if (mysqli_num_rows($result) > 0) {
+            return $result->fetch_assoc()['userbalance'];
         }
 
         $conn->close();
