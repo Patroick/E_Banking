@@ -1,5 +1,5 @@
 function startDateUpdate() {
-    print('startDateUpdate');
+    write('startDateUpdate');
 }
 
 function endDateUpdate() {
@@ -7,11 +7,11 @@ function endDateUpdate() {
 }
 
 function ibanUpdate() {
-
+    alert('ibanUpdate');
 }
 
 function bicUpdate() {
-    print('bicUpdate');
+    write('bicUpdate');
 }
 
 function reasonUpdate() {
