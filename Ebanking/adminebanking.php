@@ -167,21 +167,21 @@
                     <div class="row">
                         <div class="col-sm-2">
                             <form name="sortByDate" action="adminebanking.php" method="post">
-                                <label for="sortByDate">Von</label>
-                                <input type="date" name="sortByDate" id="startDate" class="form-control" onkeyup="startDateUpdate()">
-                                <label for="sortByDate">Bis</label>
-                                <input type="date" name="sortByDate" id="endDate" class="form-control" onkeyup="endDateUpdate()">
+                                <label for="sortByStartDate">Von</label>
+                                <input type="date" name="sortByStartDate" id="startDate" class="form-control" onkeyup="startDateUpdate()">
+                                <label for="sortByEndDate">Bis</label>
+                                <input type="date" name="sortByEndDate" id="endDate" class="form-control" onkeyup="endDateUpdate()">
                             </form>
                         </div>
                         <div class="col-sm-4">
                             <div class="row">
                                 <form name="sortByIBAN" action="adminebanking.php" method="post">
-                                    <label for="sortByText">IBAN</label>
+                                    <label for="sortByIBAN">IBAN</label>
                                     <input type="text" name="sortByIBAN" id="iban" class="form-control" placeholder="AT-XXXXXXXXXXXXXXXXXX" onkeyup="ibanUpdate()">
                                 </form>
                                 <form name="sortByBIC" action="adminebanking.php" method="post">
-                                    <label for="sortByText">BIC</label>
-                                    <input type="text" name="sortByText" id="bic" class="form-control" placeholder="ING-DIBA" onkeyup="bicUpdate()">
+                                    <label for="sortByBIC">BIC</label>
+                                    <input type="text" name="sortByBIC" id="bic" class="form-control" placeholder="ING-DIBA" onkeyup="bicUpdate()">
                                 </form>
                             </div>
                         </div>
@@ -199,10 +199,10 @@
                         </div>
                         <div class="col-sm-2">
                             <form name="sortByDate" action="adminebanking.php" method="post">
-                                <label for="sortByAmount">Min</label>
-                                <input type="text" name="sortByAmount" id="minAmount" class="form-control" placeholder="0.00" onkeyup="minAmountUpdate()">
-                                <label for="sortByAmount">Max</label>
-                                <input type="text" name="sortByDate" id="maxAmount" class="form-control" placeholder="0.00" onkeyup="maxAmountUpdate()">
+                                <label for="sortByMinAmount">Min</label>
+                                <input type="text" name="sortByMinAmount" id="minAmount" class="form-control" placeholder="0.00" onkeyup="minAmountUpdate()">
+                                <label for="sortByMaxAmount">Max</label>
+                                <input type="text" name="sortByMaxDate" id="maxAmount" class="form-control" placeholder="0.00" onkeyup="maxAmountUpdate()">
                             </form>
                         </div>
 

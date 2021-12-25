@@ -1,5 +1,18 @@
-function startDateUpdate() {
-    write('startDateUpdate');
+function startDateUpdate(startDate) {
+   if(startDate.lenght==0) {
+        document.getElementById('startDate').innerHTML=="";
+        return;
+    } else {
+        var xmlhttp = new XMLHttpRequest();
+        xmlhttp.onreadystatechange = function() {
+            if(this.readyState == 4 && this.status==200){
+                document.getElementById('startDate').innerHTML=this.responseText;
+            }
+        };
+        xmlhttp.open("GET", "../index.php", true);
+        console.log("startDate testitest");
+        xmlhttp.send();
+    }
 }
 
 function endDateUpdate() {
@@ -7,7 +20,7 @@ function endDateUpdate() {
 }
 
 function ibanUpdate(iban) {
-    if(str.lenght==0) {
+    if(iban.lenght==0) {
         document.getElementById('iban').innerHTML=="";
         return;
     } else {
@@ -15,9 +28,10 @@ function ibanUpdate(iban) {
         xmlhttp.onreadystatechange = function() {
             if(this.readyState == 4 && this.status==200){
                 document.getElementById('iban').innerHTML=this.responseText;
-                xmlhttp.open("POST", "index.php", true);
             }
         };
+        xmlhttp.open("GET", "../index.php", true);
+        console.log("iban testitest");
         xmlhttp.send();
     }
 }
@@ -33,24 +47,76 @@ function bicUpdate(bic) {
                 document.getElementById('bic').innerHTML=this.responseText;
             }
         };
-        xmlhttp.open("POST", "index.php", true);
-        console.log("testitest");
+        xmlhttp.open("POST", "../index.php", true);
+        console.log("bic testitest");
         xmlhttp.send();
     }
 }
 
-function reasonUpdate() {
-
+function reasonUpdate(reason) {
+    if(reason.lenght==0) {
+        document.getElementById('reason').innerHTML=="";
+        return;
+    } else {
+        var xmlhttp = new XMLHttpRequest();
+        xmlhttp.onreadystatechange = function() {
+            if(this.readyState == 4 && this.status==200){
+                document.getElementById('bic').innerHTML=this.responseText;
+            }
+        };
+        xmlhttp.open("POST", "../index.php", true);
+        console.log("reason testitest");
+        xmlhttp.send();
+    }
 }
 
-function referenceUpdate() {
-
+function referenceUpdate(reference) {
+    if(reference.lenght==0) {
+        document.getElementById('reference').innerHTML=="";
+        return;
+    } else {
+        var xmlhttp = new XMLHttpRequest();
+        xmlhttp.onreadystatechange = function() {
+            if(this.readyState == 4 && this.status==200){
+                document.getElementById('bic').innerHTML=this.responseText;
+            }
+        };
+        xmlhttp.open("POST", "../index.php", true);
+        console.log("reference testitest");
+        xmlhttp.send();
+    }
 }
 
-function minAmountUpdate() {
-
+function minAmountUpdate(minAmount) {
+    if(minAmount.lenght==0) {
+        document.getElementById('minAmount').innerHTML=="";
+        return;
+    } else {
+        var xmlhttp = new XMLHttpRequest();
+        xmlhttp.onreadystatechange = function() {
+            if(this.readyState == 4 && this.status==200){
+                document.getElementById('bic').innerHTML=this.responseText;
+            }
+        };
+        xmlhttp.open("POST", "../index.php", true);
+        console.log("min Amount testitest");
+        xmlhttp.send();
+    }
 }
 
-function maxAmountUpdate() {
-
+function maxAmountUpdate(maxAmount) {
+    if(maxAmount.lenght==0) {
+        document.getElementById('maxAmount').innerHTML=="";
+        return;
+    } else {
+        var xmlhttp = new XMLHttpRequest();
+        xmlhttp.onreadystatechange = function() {
+            if(this.readyState == 4 && this.status==200){
+                document.getElementById('bic').innerHTML=this.responseText;
+            }
+        };
+        xmlhttp.open("POST", "../index.php", true);
+        console.log("max Amount testitest");
+        xmlhttp.send();
+    }
 }
