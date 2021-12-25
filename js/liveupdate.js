@@ -9,7 +9,7 @@ function startDateUpdate(startDate) {
                 document.getElementById('startDate').innerHTML=this.responseText;
             }
         };
-        xmlhttp.open("GET", "../index.php", true);
+        xmlhttp.open("GET", "../Ebanking/ebanking.php?id=$_GET['id']", true);
         console.log("startDate testitest");
         xmlhttp.send();
     }
@@ -30,7 +30,10 @@ function ibanUpdate(iban) {
                 document.getElementById('iban').innerHTML=this.responseText;
             }
         };
-        xmlhttp.open("GET", "../index.php", true);
+        xmlhttp.open("GET", "../Ebanking/ebanking.php?id=$_GET['id']", true);
+        $.get( "test.php", function( data ) {
+            alert( "Data Loaded: " + data );
+        });
         console.log("iban testitest");
         xmlhttp.send();
     }

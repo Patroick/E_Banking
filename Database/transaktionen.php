@@ -428,6 +428,43 @@ class Transaktionen
 
         $conn->close();
     }
+
+    function getTableRecentTransactionsAllUserFilter($userid, $filterIBAN)
+    {
+        // Create connection
+        $conn = new mysqli($this->servername, $this->username, $this->password, $this->dbname);
+        // Check connection
+
+        if ($conn->connect_error) {
+            die("Connection failed: " . $conn->connect_error);
+        }
+
+        $sql = "SELECT * FROM Transactions WHERE sendinguserid LIKE $userid OR receivinguserId LIKE $userid ORDER BY id DESC";
+        $result = mysqli_query($conn, $sql);
+        if (mysqli_num_rows($result) > 0) {
+            $table = '';
+            foreach ($result as $row) {
+                if(stripos($row['sendinguserIBAN'], $filterIBAN) === true || stripos($row['receivinguserIBAN'], $filterIBAN) === true){
+                    $tablerow = '<tr>
+                        <td>' . $row['transactiondate'] . '</td>
+                        <td>' . $row['sendinguserIBAN'] . '</td>
+                        <td>' . $row['sendinguserBIC'] . '</td>
+                        <td>' . $row['receivinguserIBAN'] . '</td>
+                        <td>' . $row['receivinguserBIC'] . '</td>
+                        <td>' . $row['reference'] . '</td>
+                        <td>' . $row['reason'] . '</td>
+                        <td>' . $row['amount'] . '€</td>
+                        </tr>';
+
+                    $table .= $tablerow;
+                }
+            }
+
+            echo $table;
+            unset($table);
+        }
+        $conn->close();
+    }
 }
 
 ?>
