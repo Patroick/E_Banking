@@ -171,11 +171,11 @@
                             <div class="row">
                                 <form name="sortByText" action="adminebanking.php" method="post">
                                     <label for="sortByText">IBAN</label>
-                                    <input type="text" name="sortByText" id="iban" class="form-control" placeholder="AT-XXXXXXXXXXXXXXXXXX" onkeyup="ibanUpdate()">
+                                    <input type="text" name="sortByText" id="iban" class="form-control" placeholder="AT-XXXXXXXXXXXXXXXXXX" onkeyup="ibanUpdate(iban)">
                                 </form>
                                 <form name="sortByText" action="adminebanking.php" method="post">
                                     <label for="sortByText">BIC</label>
-                                    <input type="text" name="sortByText" id="bic" class="form-control" placeholder="ING-DIBA">
+                                    <input type="text" name="sortByText" id="bic" class="form-control" placeholder="ING-DIBA" onkeyup="bicUpdate(bic)">
                                 </form>
                             </div>
                         </div>
