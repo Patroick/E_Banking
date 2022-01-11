@@ -16,7 +16,6 @@ function startDateUpdate(startDate) {
 }
 
 function endDateUpdate() {
-
 }
 
 function ibanUpdate(iban) {
@@ -31,8 +30,9 @@ function ibanUpdate(iban) {
             }
         };
         xmlhttp.open("GET", "../Ebanking/ebanking.php?id=$_GET['id']", true);
-        $.get( "test.php", function( data ) {
+        $.get( "ebankingHistorie.php", function(data) {
             alert( "Data Loaded: " + data );
+            console.log(document.getElementById('tableHistorie').innerHTML);
         });
         console.log("iban testitest");
         xmlhttp.send();
