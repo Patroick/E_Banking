@@ -59,7 +59,7 @@
 
             <div class="col-sm-3 border rounded m-1 pt-3" style="text-align: center; max-height: 22em">
                 <h3> Ihr Profil </h3>
-                <img src="../Img/unknown.png" alt="Profilbild" style="width: 6em; height: 6em">
+                <img src="../Img/Ricksadge.png" alt="Profilbild" style="width: 6em; height: 6em">
                 <p class="pt-3"><?php echo $_SESSION['getData']['firstname'] . ' ' . $_SESSION['getData']['lastname']; ?></p>
                 <p><?php echo $_SESSION['getData']['email']; ?></p>
                 <form name="logout" action="ebanking.php" method="post">
@@ -118,7 +118,7 @@
                         </div>
                         <div class="form-group pt-2 pb-1">
                             <label for="reason">Zweck</label>
-                            <input type="text" class="form-control" id="reason" name="reason" value="<?= htmlspecialchars("") ?>" placeholder="Schwarzgeld" minlength="5" maxlength="255" required>
+                            <input type="text" class="form-control" id="reason" name="reason" value="<?= htmlspecialchars("") ?>" placeholder="Zalando" minlength="5" maxlength="255" required>
                         </div>
                         <button type="submit" name="transfer" class="btn btn-primary mb-2 mt-2">Überweisen</button>
                     </div>

@@ -55,7 +55,7 @@
 
             <div class="col-sm-5 border rounded m-1 pt-3" style="text-align: center; max-height: 22em">
                 <h3> Ihr Profil </h3>
-                <img src="../Img/unknown.png" alt="Profilbild" style="width: 6em; height: 6em">
+                <img src="../Img/Ricksadge.png" alt="Profilbild" style="width: 6em; height: 6em">
                 <p class="pt-3"><?php echo $_SESSION['getData']['firstname'] . ' ' . $_SESSION['getData']['lastname']; ?></p>
                 <p><?php echo $_SESSION['getData']['email']; ?></p>
                 <form name="logout" action="adminebanking.php" method="post">

@@ -465,6 +465,53 @@ class Transaktionen
         }
         $conn->close();
     }
+
+    function getTableFiltered($datumVon, $datumBis, $iban, $bic, $zweck, $referenz, $min, $max){
+        
+        $conn = new mysqli($this->servername, $this->username, $this->password, $this->dbname);
+
+        if ($conn->connect_error) {
+            die("Connection failed: " . $conn->connect_error);
+        }
+
+        $sql = "SELECT * FROM Transactions WHERE ((transactiondate BETWEEN $datumVon AND $datumBis)
+        OR $datumVon IS NULL OR $datumBis Is NULL) AND 
+        (sendinguserIBAN LIKE $iban OR receivinguserIBAN LIKE $iban OR $iban IS NULL) AND
+        (sendinguserBIC LIKE $bic OR receivinguserBIC LIKE $bic OR $bic IS NULL) AND
+        (reason LIKE $zweck OR $zweck IS NULL) AND
+        (reference LIKE $referenz OR $referenz IS NULL) AND 
+        (amount BETWEEN $min AND $max OR $min IS NULL OR $max IS NULL)";
+
+        $result = mysqli_query($conn, $sql);
+
+        echo($result);
+
+        if (mysqli_num_rows($result) > 0) {
+            $table = '';
+            foreach ($result as $row) {
+                $tablerow = '<tr>
+                        <td>' . $row['transactiondate'] . '</td>
+                        <td>' . $row['sendinguserIBAN'] . '</td>
+                        <td>' . $row['sendinguserBIC'] . '</td>
+                        <td>' . $row['receivinguserIBAN'] . '</td>
+                        <td>' . $row['receivinguserBIC'] . '</td>
+                        <td>' . $row['reference'] . '</td>
+                        <td>' . $row['reason'] . '</td>
+                        <td>' . $row['amount'] . '€</td>
+                        </tr>';
+
+                $table .= $tablerow;
+            }
+
+            echo $table;
+            unset($table);
+        }
+        
+        $conn->close();
+
+    }
+
+    
 }
 
 ?>
